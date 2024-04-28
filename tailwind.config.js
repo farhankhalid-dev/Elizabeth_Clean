@@ -11,5 +11,6 @@ module.exports = {
     extend: {},
   },
   plugins: [],
+  // Commenting to test it out
 }
 
