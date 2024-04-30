@@ -1,123 +1,142 @@
-<div x-data="{ mobileMenuOpen: true } class=" relative bg-white">
-
-  <!-- NORMAL NAV -->
+<!-- This is a Vue.js template that creates a navigation menu for a website -->
+<div x-data="{ mobileMenuOpen: false }" class="relative bg-white">
+  <!-- Main container for the navigation menu -->
   <div class="mx-auto px-4 sm:px-6">
-    <div class="flex justify-between items-center py-6 md:justify-start md:space-x-10">
-
-      <!-- STORE NAME / STORE LOGO -->
+    <div class="flex justify-between lg:justify-center items-center py-6 md:space-x-10">
+      <!-- Store name or logo -->
       <div class="flex justify-start lg:flex-1 truncate">
-        <!-- Display the store name or logo -->
-        <h1 class="text-xl font-bold truncate">{{ shop.name }} </h1>
+        <h1 class="text-xl font-bold truncate">{{ shop.name }}</h1>
       </div>
-      <!-- Mobile menu toggle button -->
+
+      <!-- Hamburger menu button for mobile -->
       <div class="-mr-2 -my-2 ml-3 md:hidden">
-        <button type="button" class="bg-white p-2 inline-flex items-center justify-center focus:outline-none">
-          {% render 'icon-hamburger' %}
+        <button
+          @click="mobileMenuOpen = true"
+          type="button"
+          class="bg-white p-2 inline-flex items-center justify-center focus:outline-none">
+          {% render 'icon-hamburger-menu' %}
         </button>
       </div>
 
-      <!-- NAVIGATION MENU -->
+      <!-- Desktop navigation menu -->
       <nav x-data="{open: false}" class="hidden md:flex space-x-10">
+        <!-- Loop through main menu links -->
         {% for link in linklists['main-menu'].links %}
-        <!-- Main menu item -->
-        <div class="relative">
-          <!-- Button to toggle submenu -->
-          <button @click="open = !open" type="button"
-            class="inline-flex items-center text-base text-gray-500 hover:text-gray-900">
-            {{ link.title }}
-            {% render 'icon-dropdown' %}
-          </button>
-
-          <!-- Submenu container -->
-          <div @click.away="open = false" x-show="open"
-            class="absolute z-10 -ml-5 mt-5 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2">
-
-            <!-- Submenu content -->
-            <div class="shadow-lg border ring-black ring-opacity-5 overflow-hidden rounded-lg">
-              <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
-                <!-- Loop through submenu links -->
-                {% for childLink in link.links %}
-                <!-- Submenu link -->
-                <a href="{{ childLink.url }}" class="-m-3 p-3 flex items start rounded-lg hover:bg-gray-100">
-                  <div class="ml-4">
-                    <p class="text-gray-900 text-base font-medium">
-                      {{ childLink.title }}
-                    </p>
+          {% if link.links != empty %}
+            <!-- Dropdown menu with sublinks -->
+            <div class="relative">
+              <button
+                @click="open = !open"
+                type="button"
+                class="inline-flex items-center text-base text-gray-500 hover:text-gray-900">
+                {{ link.title }}
+                {% render 'icon-dropdown' %}
+              </button>
+              <!-- Submenu container -->
+              <div
+                x-cloak
+                @click.away="open = false"
+                x-show="open"
+                class="absolute z-10 -ml-5 mt-5 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2">
+                <div class="shadow-lg border ring-black ring-opacity-5 overflow-hidden rounded-lg">
+                  <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+                    <!-- Loop through sublinks -->
+                    {% for childLink in link.links %}
+                      <a href="{{ childLink.url }}" class="-m-3 p-3 flex items start rounded-lg hover:bg-gray-100">
+                        <div class="ml-4">
+                          <p class="text-gray-900 text-base font-medium">
+                            {{ childLink.title }}
+                          </p>
+                        </div>
+                      </a>
+                    {% endfor %}
                   </div>
-                </a>
-                {% endfor %}
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        {% else %}
-        <!-- No submenu, display regular link -->
-        <div class="relative">
-          <a href="{{ link.url }}" class="text-base text-gray-500 hover:text-gray-900">{{ link.title }}</a>
-        </div>
-        {% endif %}
+          {% else %}
+            <!-- Single link -->
+            <div class="relative">
+              <a href="{{ link.url }}" class="text-base text-gray-500 hover:text-gray-900">{{ link.title }}</a>
+            </div>
+          {% endif %}
         {% endfor %}
       </nav>
 
-      <!-- Right-aligned items -->
+      <!-- Icons for shopping bag, login, and register -->
       <div class="hidden md:flex items-center justify-end md:flex-1 space-x-5">
         <a href="{{ routes.cart_url }}" class="whitespace-nowrap text-base text-gray-500 hover:text-gray-900">
           {% render 'icons-shopping-bag' %}
         </a>
-        <a class="text-base text-gray-500 hover:text-gray-900" href="{{ routes.account_login_url }}">Login</a>
-        <a class="text-base text-gray-500 hover:text-gray-900" href="{{ routes.account_register_url }}">Register</a>
+        <a href="{{ routes.account_login_url }}" class="text-base text-gray-500 hover:text-gray-900">Login</a>
+        <a href="{{ routes.account_register_url }}" class="text-base text-gray-500 hover:text-gray-900">Register</a>
       </div>
     </div>
   </div>
 
-  <!-- MOBILE MENU CONTAINER -->
-  <div class="absolute z-10 top-0 inset-x-0 p-2 transform origin-top-left md:hidden">
+  <!-- Mobile navigation menu -->
+  <div
+    x-show="mobileMenuOpen"
+    x-cloak
+    x-transition
+    class="absolute z-10 top-0 inset-x-0 p-2 transform origin-top-left md:hidden">
     <div class="shadow-lg rounded-lg ring-1 ring-black ring-opacity-5 bg-white w-full">
       <div class="p-5 divide-y-2 divide-gray-50">
-
-        <!-- MOBILE MENU HEADER TITLE PLUS CLOSE BUTTON -->
+        <!-- Mobile menu header with title and close button -->
         <div class="flex items-center justify-between pb-3">
           <div>
-            <h1 class="text-lg text-gray-500">MENU</h1>
+            <h1 class="text-lg text-gray-500">{{ shop.name }}</h1>
           </div>
           <div class="-mr-2">
-            <button type="button" class="bg-white rounded-md p-2 text-gray-500">
+            <button
+              @click="mobileMenuOpen = false"
+              type="button"
+              class="bg-white rounded-md p-2 text-gray-500">
               {% render 'icon-close' %}
             </button>
           </div>
         </div>
 
-        <!-- NAVIGATION LINKS FOR MOBILE MENU -->
+        <!-- Navigation links for mobile menu -->
         <div class="pt-3">
-          <nav class="grid gap-y-7">
-            {% for link in linklists.main-menu.links %}
-            {% if link.links != blank %}
-            <div class="relative">
-              <!-- Button for mobile submenu -->
-              <button type="button"
-                class="text-base text-gray-500 hover:text-gray-900 flex items-center justify-between w-full">
-                <div> {{ link.title }} </div>
-                {% render 'icon-dropdown' %}
-              </button>
-              <!-- Loop through mobile submenu links -->
-              {% for childLink in link.links %}
-              <div class="grid gap-y-7 py-3">
-                <!-- Mobile submenu link -->
-                <a href="{{ childLink.url }}"
-                  class="-m-3 p-3 mt-2 flex items-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-50">
-                  <span class="ml-3 text-base font-medium text-gray-500"> {{ childLink.title }} </span>
-                </a>
-              </div>
-              {% endfor %}
+          <nav x-data="{ open: false }" class="grid gap-y-7">
+            <!-- Loop through main menu links -->
+            {% for link in linklists['main-menu'].links %}
+              {% if link.links != empty %}
+                <!-- Dropdown menu with sublinks -->
+                <div class="relative">
+                  <button
+                    x-transition
+                    @click="open = !open"
+                    type="button"
+                    class="text-base text-gray-500 hover:text-gray-900 flex items-center justify-between w-full">
+                    <div>
+                      {{ link.title }}
+                    </div>
+                    {% render 'icon-dropdown' %}
+                  </button>
+                  <!-- Submenu container -->
+                  <div
+                    x-cloak
+                    x-transition
+                    x-show="open"
+                    @click.away="open = false"
+                    class="grid gap-y-7 py-3">
+                    <!-- Loop through sublinks -->
+                    {% for childLink in link.links %}
+                      <a href="{{ childLink.url }}" class="-m-3 p-3 mt-2 flex items-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-50">
+                        <span class="ml-3 text-base font-medium text-gray-500">{{ childLink.title }}</span>
+                      </a>
+                    {% endfor %}
+                  </div>
+                </div>
               {% else %}
-              <!-- No mobile submenu, display regular link -->
-              <a href="{{ link.url }}"
-                class="-m-3 p-3 flex items-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-50">
-                {{ link.title }}
-              </a>
+                <!-- Single link -->
+                <a href="{{ link.url }}" class="-m-3 p-3 flex items-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-50">
+                  {{ link.title }}
+                </a>
               {% endif %}
-              {% endfor %}
-            </div>
+            {% endfor %}
           </nav>
         </div>
       </div>
