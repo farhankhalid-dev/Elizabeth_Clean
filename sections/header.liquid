@@ -29,7 +29,7 @@
               'icon-dropdown' %}</div>
           </button>
           <!-- Submenu container -->
-          <div x-cloak x-show="open" @mouseenter="open = true" @mouseleave="open = false"
+          <div x-cloak x-show="open" @click.away="open = false" @mouseenter="open = true" @mouseleave="open = false"
             class="absolute z-10 -ml-5 mt-5 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2">
             <div class="shadow-lg border ring-black ring-opacity-5 overflow-hidden rounded-lg">
               <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
@@ -47,7 +47,8 @@
                       'icon-dropdown' %}</div>
                   </button>
                   <!-- Sub-Submenu container -->
-                  <div x-cloak x-show="open" @mouseenter="open = true" @mouseleave="open = false" class="grid gap-y-7 py-3">
+                  <div x-cloak x-show="open" @mouseenter="open = true" @mouseleave="open = false"
+                    class="grid gap-y-7 py-3">
                     <!-- Loop through sublinks -->
                     {% for subChildLink in childLink.links %}
                     <a href="{{ subChildLink.url }}"
@@ -124,8 +125,7 @@
                   'icon-dropdown' %}</div>
               </button>
               <!-- Submenu container -->
-              <div x-cloak x-show="open" @mouseenter="open = true" @mouseleave="open = false"
-                class="grid gap-y-7 py-3">
+              <div x-cloak x-show="open" @mouseenter="open = true" @mouseleave="open = false" class="grid gap-y-7 py-3">
                 <!-- Loop through sublinks -->
                 {% for childLink in link.links %}
                 {% if childLink.links != empty %}
