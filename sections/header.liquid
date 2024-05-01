@@ -50,6 +50,7 @@
                     {% for subChildLink in childLink.links %}
                     <a href="{{ subChildLink.url }}"
                       class="-m-3 p-3 mt-2 flex items-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-50">
+                      <!--Wrap in span to get indent -->
                       <span class="ml-3 text-base font-medium text-gray-500">{{ subChildLink.title }}</span>
                     </a>
                     {% endfor %}
@@ -59,7 +60,7 @@
                 <!-- Single link -->
                 <a href="{{ childLink.url }}"
                   class="-m-3 p-3 mt-2 flex items-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-50">
-                  <span class="ml-3 text-base font-medium text-gray-500">{{ childLink.title }} test</span>
+                  {{ childLink.title }} test
                 </a>
                 {% endif %}
                 {% endfor %}
@@ -148,7 +149,7 @@
                 <!-- Single link -->
                 <a href="{{ childLink.url }}"
                   class="-m-3 p-3 mt-2 flex items-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-50">
-                  <span class="ml-3 text-base font-medium text-gray-500">{{ childLink.title }}</span>
+                  {{ childLink.title }}
                 </a>
                 {% endif %}
                 {% endfor %}
