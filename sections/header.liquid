@@ -9,11 +9,9 @@
 
       <!-- Hamburger menu button for mobile -->
       <div class="-mr-2 -my-2 ml-3 md:hidden">
-        <button
-          @click="mobileMenuOpen = true"
-          type="button"
+        <button @click="mobileMenuOpen = true" type="button"
           class="bg-white p-2 inline-flex items-center justify-center focus:outline-none">
-          {% render 'icon-hamburger-menu' %}
+          {% render 'icon-hamburger' %}
         </button>
       </div>
 
@@ -21,76 +19,67 @@
       <nav class="hidden md:flex space-x-10">
         <!-- Loop through main menu links -->
         {% for link in linklists['main-menu'].links %}
-          {% if link.links != empty %}
-            <!-- Dropdown menu with sublinks -->
-            <div class="relative" x-data="{ open: false }">
-              <button
-                @click="open = !open"
-                type="button"
-                class="inline-flex items-center text-base text-gray-500 hover:text-gray-900">
-                {{ link.title }}
-                {% render 'icon-dropdown' %}
-              </button>
-              <!-- Submenu container -->
-              <div
-                x-cloak
-                x-show="open"
-                @click.away="open = false"
-                class="absolute z-10 -ml-5 mt-5 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2">
-                <div class="shadow-lg border ring-black ring-opacity-5 overflow-hidden rounded-lg">
-                  <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+        {% if link.links != empty %}
+        <!-- Dropdown menu with sublinks -->
+        <div class="relative" x-data="{ open: false }">
+          <button @click="open = !open" type="button"
+            class="inline-flex items-center text-base text-gray-500 hover:text-gray-900">
+            {{ link.title }}
+            {% render 'icon-dropdown' %}
+          </button>
+          <!-- Submenu container -->
+          <div x-cloak x-show="open" @click.away="open = false"
+            class="absolute z-10 -ml-5 mt-5 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2">
+            <div class="shadow-lg border ring-black ring-opacity-5 overflow-hidden rounded-lg">
+              <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+                <!-- Loop through sublinks -->
+                {% for childLink in link.links %}
+                {% if childLink.links != empty %}
+                <!-- Dropdown menu with sub-sublinks -->
+                <div class="relative" x-data="{ open: false }">
+                  <button @click="open = !open" type="button"
+                    class="text-base text-gray-500 hover:text-gray-900 flex items-center justify-between w-full">
+                    <div>
+                      {{ childLink.title }}
+                    </div>
+                    {% render 'icon-dropdown' %}
+                  </button>
+                  <!-- Sub-Submenu container -->
+                  <div x-cloak x-show="open" @click.away="open = false" class="grid gap-y-7 py-3">
                     <!-- Loop through sublinks -->
-                    {% for childLink in link.links %}
-                      {% if childLink.links != empty %}
-                        <!-- Dropdown menu with sub-sublinks -->
-                        <div class="relative" x-data="{ open: false }">
-                          <button
-                            @click="open = !open"
-                            type="button"
-                            class="text-base text-gray-500 hover:text-gray-900 flex items-center justify-between w-full">
-                            <div>
-                              {{ childLink.title }}
-                            </div>
-                            {% render 'icon-dropdown' %}
-                          </button>
-                          <!-- Sub-Submenu container -->
-                          <div
-                            x-cloak
-                            x-show="open"
-                            @click.away="open = false"
-                            class="grid gap-y-7 py-3">
-                            <!-- Loop through sublinks -->
-                            {% for subChildLink in childLink.links %}
-                              <a href="{{ subChildLink.url }}" class="-m-3 p-3 mt-2 flex items-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-50">
-                                <span class="ml-3 text-base font-medium text-gray-500">{{ subChildLink.title }}</span>
-                              </a>
-                            {% endfor %}
-                          </div>
-                        </div>
-                      {% else %}
-                        <!-- Single link -->
-                        <a href="{{ childLink.url }}" class="-m-3 p-3 mt-2 flex items-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-50">
-                          <span class="ml-3 text-base font-medium text-gray-500">{{ childLink.title }}</span>
-                        </a>
-                      {% endif %}
+                    {% for subChildLink in childLink.links %}
+                    <a href="{{ subChildLink.url }}"
+                      class="-m-3 p-3 mt-2 flex items-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-50">
+                      <span class="ml-3 text-base font-medium text-gray-500">{{ subChildLink.title }}</span>
+                    </a>
                     {% endfor %}
                   </div>
                 </div>
+                {% else %}
+                <!-- Single link -->
+                <a href="{{ childLink.url }}"
+                  class="-m-3 p-3 mt-2 flex items-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-50">
+                  <span class="ml-3 text-base font-medium text-gray-500">{{ childLink.title }} test</span>
+                </a>
+                {% endif %}
+                {% endfor %}
               </div>
             </div>
-          {% else %}
-            <!-- Single link -->
-            <div class="relative">
-              <a href="{{ link.url }}" class="text-base text-gray-500 hover:text-gray-900">{{ link.title }}</a>
-            </div>
-          {% endif %}
+          </div>
+        </div>
+        {% else %}
+        <!-- Single link -->
+        <div class="relative">
+          <a href="{{ link.url }}" class="text-base text-gray-500 hover:text-gray-900">{{ link.title }}</a>
+        </div>
+        {% endif %}
         {% endfor %}
       </nav>
 
       <!-- Icons for shopping bag, login, and register -->
       <div class="hidden md:flex items-center justify-end md:flex-1 space-x-5">
         <a href="{{ routes.cart_url }}" class="whitespace-nowrap text-base text-gray-500 hover:text-gray-900">
-          {% render 'icons-shopping-bag' %}
+          {% render 'icon-shopping-bag' %}
         </a>
         <a href="{{ routes.account_login_url }}" class="text-base text-gray-500 hover:text-gray-900">Login</a>
         <a href="{{ routes.account_register_url }}" class="text-base text-gray-500 hover:text-gray-900">Register</a>
@@ -99,10 +88,7 @@
   </div>
 
   <!-- Mobile navigation menu -->
-  <div
-    x-show="mobileMenuOpen"
-    x-cloak
-    x-transition
+  <div x-show="mobileMenuOpen" x-cloak x-transition
     class="absolute z-10 top-0 inset-x-0 p-2 transform origin-top-left md:hidden">
     <div class="shadow-lg rounded-lg ring-1 ring-black ring-opacity-5 bg-white w-full">
       <div class="p-5 divide-y-2 divide-gray-50">
@@ -112,10 +98,7 @@
             <h1 class="text-lg text-gray-500">{{ shop.name }}</h1>
           </div>
           <div class="-mr-2">
-            <button
-              @click="mobileMenuOpen = false"
-              type="button"
-              class="bg-white rounded-md p-2 text-gray-500">
+            <button @click="mobileMenuOpen = false" type="button" class="bg-white rounded-md p-2 text-gray-500">
               {% render 'icon-close' %}
             </button>
           </div>
@@ -126,67 +109,58 @@
           <nav x-data="{ open: false }" class="grid gap-y-7">
             <!-- Loop through main menu links -->
             {% for link in linklists['main-menu'].links %}
-              {% if link.links != empty %}
-                <!-- Dropdown menu with sublinks -->
+            {% if link.links != empty %}
+            <!-- Dropdown menu with sublinks -->
+            <div class="relative" x-data="{ open: false }">
+              <button @click="open = !open" type="button"
+                class="text-base text-gray-500 hover:text-gray-900 flex items-center justify-between w-full">
+                <div>
+                  {{ link.title }}
+                </div>
+                {% render 'icon-dropdown' %}
+              </button>
+              <!-- Submenu container -->
+              <div x-cloak x-show="open" @click.away="open = false" class="grid gap-y-7 py-3">
+                <!-- Loop through sublinks -->
+                {% for childLink in link.links %}
+                {% if childLink.links != empty %}
+                <!-- Dropdown menu with sub-sublinks -->
                 <div class="relative" x-data="{ open: false }">
-                  <button
-                    @click="open = !open"
-                    type="button"
+                  <button @click="open = !open" type="button"
                     class="text-base text-gray-500 hover:text-gray-900 flex items-center justify-between w-full">
                     <div>
-                      {{ link.title }}
+                      {{ childLink.title }}
                     </div>
                     {% render 'icon-dropdown' %}
                   </button>
-                  <!-- Submenu container -->
-                  <div
-                    x-cloak
-                    x-show="open"
-                    @click.away="open = false"
-                    class="grid gap-y-7 py-3">
+                  <!-- Sub-Submenu container -->
+                  <div x-cloak x-show="open" @click.away="open = false" class="grid gap-y-7 py-3">
                     <!-- Loop through sublinks -->
-                    {% for childLink in link.links %}
-                      {% if childLink.links != empty %}
-                        <!-- Dropdown menu with sub-sublinks -->
-                        <div class="relative" x-data="{ open: false }">
-                          <button
-                            @click="open = !open"
-                            type="button"
-                            class="text-base text-gray-500 hover:text-gray-900 flex items-center justify-between w-full">
-                            <div>
-                              {{ childLink.title }}
-                            </div>
-                            {% render 'icon-dropdown' %}
-                          </button>
-                          <!-- Sub-Submenu container -->
-                          <div
-                            x-cloak
-                            x-show="open"
-                            @click.away="open = false"
-                            class="grid gap-y-7 py-3">
-                            <!-- Loop through sublinks -->
-                            {% for subChildLink in childLink.links %}
-                              <a href="{{ subChildLink.url }}" class="-m-3 p-3 mt-2 flex items-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-50">
-                                <span class="ml-3 text-base font-medium text-gray-500">{{ subChildLink.title }}</span>
-                              </a>
-                            {% endfor %}
-                          </div>
-                        </div>
-                      {% else %}
-                        <!-- Single link -->
-                        <a href="{{ childLink.url }}" class="-m-3 p-3 mt-2 flex items-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-50">
-                          <span class="ml-3 text-base font-medium text-gray-500">{{ childLink.title }}</span>
-                        </a>
-                      {% endif %}
+                    {% for subChildLink in childLink.links %}
+                    <a href="{{ subChildLink.url }}"
+                      class="-m-3 p-3 mt-2 flex items-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-50">
+                      <span class="ml-3 text-base font-medium text-gray-500">{{ subChildLink.title }}</span>
+                    </a>
                     {% endfor %}
                   </div>
                 </div>
-              {% else %}
+                {% else %}
                 <!-- Single link -->
-                <a href="{{ link.url }}" class="-m-3 p-3 flex items-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-50">
-                  {{ link.title }}
+                <a href="{{ childLink.url }}"
+                  class="-m-3 p-3 mt-2 flex items-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-50">
+                  <span class="ml-3 text-base font-medium text-gray-500">{{ childLink.title }}</span>
                 </a>
-              {% endif %}
+                {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+            {% else %}
+            <!-- Single link -->
+            <a href="{{ link.url }}"
+              class="-m-3 p-3 flex items-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-50">
+              {{ link.title }}
+            </a>
+            {% endif %}
             {% endfor %}
           </nav>
         </div>
